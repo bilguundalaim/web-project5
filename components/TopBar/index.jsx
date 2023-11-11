@@ -16,7 +16,7 @@ class TopBar extends React.Component {
       <AppBar className="cs142-topbar-appBar" position="absolute">
         <Toolbar>
           <Typography variant="h5" color="inherit">
-            This is the TopBar component
+            Bilguundalaim
           </Typography>
         </Toolbar>
       </AppBar>

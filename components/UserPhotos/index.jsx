@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 
 import "./styles.css";
 
@@ -9,22 +9,47 @@ import "./styles.css";
 class UserPhotos extends React.Component {
   constructor(props) {
     super(props);
+    this.jsonData = window.cs142models.photoOfUserModel(this.props.match.params.userId);
+    console.log(this.jsonData);
   }
 
   render() {
     return (
-      <Typography variant="body1">
-        This should be the UserPhotos view of the PhotoShare app. Since it is
-        invoked from React Router the params from the route will be in property
-        match. So this should show details of user:
-        {this.props.match.params.userId}. You can fetch the model for the user
-        from window.cs142models.photoOfUserModel(userId):
-        <Typography variant="caption">
-          {JSON.stringify(
-            window.cs142models.photoOfUserModel(this.props.match.params.userId)
-          )}
-        </Typography>
-      </Typography>
+      <div className="container">
+        {this.jsonData.map((photo) => {
+          const id = photo._id;
+          const url = `../../images/${photo.file_name}`;
+          const datetime = photo.date_time.slice(0, 10);
+          const comments = photo.comments;
+          return (
+            <Paper key={id} className="photo">
+              <div>
+                <img src={url} alt="" />
+                <Typography variant="body2" color="textSecondary">{datetime}</Typography>
+              </div>
+              <div>
+                {comments ? 
+                  comments.map((comment) => {
+                    const commentId = comment._id;
+                    const userComment = comment.comment;
+                    const commentDatetime = comment.date_time.slice(0, 10);
+                    const username = `${comment.user.first_name} ${comment.user.last_name}`;
+                    return (
+                      <div key={commentId} className="comment">
+                        <div>
+                          <Typography variant="subtitle1">{username}</Typography>
+                          <Typography variant="body2" color="textSecondary">{commentDatetime}</Typography>
+                        </div>
+                        <Typography variant="body1">{userComment}</Typography>
+                      </div>
+                    );
+                  }) :
+                  <Typography variant="body1">There is no comment.</Typography> }
+              </div>
+            </Paper>
+          );
+        })}
+      </div>
     );
   }
 }

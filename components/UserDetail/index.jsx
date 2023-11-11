@@ -33,17 +33,17 @@ class UserDetail extends React.Component {
 
   render() {
     return (
-      <Typography variant="body1">
+      <div>
         {this.state.userDetail && 
           Object.entries(this.state.userDetail).map(([key, value]) => {
             return (
-              <Typography key={key}>
+              <Typography key={key} variant="body1">
                 {`${key}: ${value}`}
               </Typography>
             );
           })}
           {this.state.userDetail && <Button variant="contained" LinkComponent={Link} to={`/photos/${this.state.userDetail._id}`}>PHOTOS</Button>}
-      </Typography>
+      </div>
     );
   }
   
