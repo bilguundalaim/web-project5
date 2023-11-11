@@ -20,7 +20,7 @@ class PhotoShare extends React.Component {
         <div>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TopBar />
+              <TopBar context="Welcome!"/>
             </Grid>
             <div className="cs142-main-topbar-buffer" />
             <Grid item sm={3}>

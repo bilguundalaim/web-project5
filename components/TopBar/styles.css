@@ -2,3 +2,8 @@
   height: 60;
   justify-content: "center";
 }
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+}
