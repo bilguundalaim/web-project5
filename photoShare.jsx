@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Grid, Typography, Paper } from "@mui/material";
-import { HashRouter, Route, Switch } from "react-router-dom";
+import { HashRouter, Route, Switch, withRouter } from "react-router-dom";
 
 import "./styles/main.css";
 import TopBar from "./components/TopBar";
@@ -12,7 +12,16 @@ import UserPhotos from "./components/UserPhotos";
 class PhotoShare extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      dataFromChild: null,
+      source: null,
+    };
   }
+
+  parentCallBack = (fromChild, source) => {
+    this.setState({ dataFromChild: fromChild });
+    this.setState({ source: source });
+  };
 
   render() {
     return (
@@ -20,7 +29,7 @@ class PhotoShare extends React.Component {
         <div>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TopBar context="Welcome!"/>
+              <TopBar context={this.state.dataFromChild} source={this.state.source}/>
             </Grid>
             <div className="cs142-main-topbar-buffer" />
             <Grid item sm={3}>
@@ -52,11 +61,11 @@ class PhotoShare extends React.Component {
                   />
                   <Route
                     path="/users/:userId"
-                    render={(props) => <UserDetail {...props} />}
+                    render={(props) => <UserDetail {...props} callback={this.parentCallBack} />}
                   />
                   <Route
                     path="/photos/:userId"
-                    render={(props) => <UserPhotos {...props} />}
+                    render={(props) => <UserPhotos {...props} callback={this.parentCallBack}/>}
                   />
                   <Route path="/users" component={UserList} />
                 </Switch>
@@ -68,5 +77,7 @@ class PhotoShare extends React.Component {
     );
   }
 }
+
+export default withRouter(PhotoShare);
 
 ReactDOM.render(<PhotoShare />, document.getElementById("photoshareapp"));

@@ -16,19 +16,31 @@ class UserDetail extends React.Component {
     };
   }
   
-  getUserDetail = () => {
+  getUserDetail = (callback) => {
     const userData = cs142models.userModel(this.props.match.params.userId);
-    this.setState({userDetail: userData});
+    this.setState({userDetail: userData}, callback);
   };
 
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.userId !== this.props.match.params.userId) {
-      this.getUserDetail();
+      this.getUserDetail(() => {
+        const firstname = this.state.userDetail.first_name;
+        const lastname = this.state.userDetail.last_name;
+        this.props.callback(`${firstname} ${lastname}`, "userDetail");
+      });
     }
   }
 
   componentDidMount() {
-    this.getUserDetail();
+    this.getUserDetail(() => {
+      const firstname = this.state.userDetail.first_name;
+      const lastname = this.state.userDetail.last_name;
+      this.props.callback(`${firstname} ${lastname}`, "userDetail");
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.callback("Welcome");
   }
 
   render() {

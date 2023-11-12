@@ -9,14 +9,32 @@ import "./styles.css";
 class UserPhotos extends React.Component {
   constructor(props) {
     super(props);
-    this.jsonData = window.cs142models.photoOfUserModel(this.props.match.params.userId);
-    console.log(this.jsonData);
+    this.state = {
+      jsonData: null,
+    };
+  }
+
+  getJsonData(callback) {
+    const jsonData = window.cs142models.photoOfUserModel(this.props.match.params.userId);
+    this.setState({ jsonData: jsonData }, callback);
+  }
+
+  componentDidMount() {
+    this.getJsonData(() => {
+      const firstname = window.cs142models.userModel(this.props.match.params.userId).first_name;
+      const lastname = window.cs142models.userModel(this.props.match.params.userId).last_name;
+      this.props.callback(`${firstname} ${lastname}`, "photo");
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.callback("Welcome");
   }
 
   render() {
     return (
       <div className="container">
-        {this.jsonData.map((photo) => {
+        {this.state.jsonData && this.state.jsonData.map((photo) => {
           const id = photo._id;
           const url = `../../images/${photo.file_name}`;
           const datetime = photo.date_time.slice(0, 10);

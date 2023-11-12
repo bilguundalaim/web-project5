@@ -10,13 +10,14 @@ class TopBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      context: this.props.context,
+      context: "Welcome",
     };
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.context !== this.props.context) this.setState({ context: this.props.context });
-    console.log(this.state.context);
+    if (prevProps.context !== this.props.context) {
+      this.setState({ context: this.props.source === "photo" ? `${this.props.context}'s photo` : this.props.context });
+    }
   }
 
   render() {
