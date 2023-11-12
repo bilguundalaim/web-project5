@@ -1,5 +1,6 @@
 import React from "react";
 import { Paper, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 import "./styles.css";
 
@@ -13,7 +14,7 @@ class UserPhotos extends React.Component {
       jsonData: null,
     };
   }
-
+  
   getJsonData(callback) {
     const jsonData = window.cs142models.photoOfUserModel(this.props.match.params.userId);
     this.setState({ jsonData: jsonData }, callback);
@@ -55,7 +56,7 @@ class UserPhotos extends React.Component {
                     return (
                       <div key={commentId} className="comment">
                         <div>
-                          <Typography variant="subtitle1">{username}</Typography>
+                          <Typography variant="subtitle1" component={Link} to={`/users/${comment.user._id}`}>{username}</Typography>
                           <Typography variant="body2" color="textSecondary">{commentDatetime}</Typography>
                         </div>
                         <Typography variant="body1">{userComment}</Typography>

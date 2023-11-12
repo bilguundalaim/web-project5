@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Paper } from "@mui/material";
 import { Link } from "react-router-dom";
 
 import "./styles.css";
@@ -8,6 +8,10 @@ import { cs142models } from "../../modelData/photoApp";
 /**
  * Define UserDetail, a React component of CS142 Project 5.
  */
+function toCamelCase(string) {
+  string = string.replace(/_/g, " ");
+  return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
 class UserDetail extends React.Component {
   constructor(props) {
     super(props);
@@ -45,20 +49,27 @@ class UserDetail extends React.Component {
 
   render() {
     return (
-      <div>
-        {this.state.userDetail && 
-          Object.entries(this.state.userDetail).map(([key, value]) => {
-            return (
-              <Typography key={key} variant="body1">
-                {`${key}: ${value}`}
-              </Typography>
-            );
+      this.state.userDetail && (
+        <div className="detail-container">
+          {Object.keys(this.state.userDetail).map((key) => {
+            if (key !== "_id") {
+              return (
+                <Paper className="detail-item" key={key}>
+                  <Typography variant="h6">{toCamelCase(key)}</Typography>
+                  <Typography variant="body1">{this.state.userDetail[key]}</Typography>
+                </Paper>
+              );
+            } else {
+              return null;
+            }
           })}
-          {this.state.userDetail && <Button variant="contained" LinkComponent={Link} to={`/photos/${this.state.userDetail._id}`}>PHOTOS</Button>}
-      </div>
+          <Link to={`/photos/${this.state.userDetail._id}`}>
+            <Button variant="contained">PHOTOS</Button>
+          </Link>
+        </div>
+      )
     );
   }
-  
 }
 
 export default UserDetail;
