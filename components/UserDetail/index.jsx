@@ -3,7 +3,7 @@ import { Typography, Button, Paper } from "@mui/material";
 import { Link } from "react-router-dom";
 
 import "./styles.css";
-import { cs142models } from "../../modelData/photoApp";
+import fetchModel from "../../lib/fetchModelData";
 
 /**
  * Define UserDetail, a React component of CS142 Project 5.
@@ -21,8 +21,15 @@ class UserDetail extends React.Component {
   }
   
   getUserDetail = (callback) => {
-    const userData = cs142models.userModel(this.props.match.params.userId);
-    this.setState({userDetail: userData}, callback);
+    // const userData = cs142models.userModel(this.props.match.params.userId);
+    // this.setState({userDetail: userData}, callback);
+    fetchModel(`http://localhost:3000/user/${this.props.match.params.userId}`)
+      .then(response => {
+        this.setState({ userDetail: response.data }, callback);
+      })
+      .catch(error => {
+        console.error('Error fetching user detail: ', error);
+      });
   };
 
   componentDidUpdate(prevProps) {

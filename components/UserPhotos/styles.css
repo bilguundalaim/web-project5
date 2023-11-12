@@ -37,3 +37,12 @@ img {
   justify-content: space-between;
   margin-bottom: 5px;
 }
+
+.button-container {
+  width: 950px;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  position: absolute;
+  bottom: 0;
+}

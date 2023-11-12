@@ -7,3 +7,9 @@
   display: flex;
   justify-content: space-between;
 }
+
+.toolbar > div {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
