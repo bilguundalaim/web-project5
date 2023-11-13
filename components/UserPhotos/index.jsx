@@ -48,6 +48,11 @@ class UserPhotos extends React.Component {
 
   componentDidMount() {
     this.getJsonData(() => {
+      // const photoId = this.props.match.params.photoId;
+      // if (photoId) {
+      //   const index = this.state.jsonData.findIndex(photo => photo._id === photoId);
+      //   this.setState({ currentPhotoIndex: index });
+      // }
       this.props.callback(
         `${this.state.firstname} ${this.state.lastname}`,
         "photo"
@@ -56,6 +61,13 @@ class UserPhotos extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    // if (prevProps.match.params.photoId !== this.props.match.params.photoId) {
+    //   const photoId = this.props.match.params.photoId;
+    //   if (photoId) {
+    //     const index = this.state.jsonData.findIndex(photo => photo._id === photoId);
+    //     this.setState({ currentPhotoIndex: index });
+    //   }
+    // }
     if (prevProps.advancedFeature !== this.props.advancedFeature) {
       this.setState({ advancedFeature: this.props.advancedFeature });
     }
@@ -68,11 +80,13 @@ class UserPhotos extends React.Component {
   handlePrevButtonClick = () => {
     const prevIndex = this.state.currentPhotoIndex - 1;
     this.setState({ currentPhotoIndex: prevIndex });
+    // this.props.history.push(`/photos/${this.props.match.params.userId}/${this.state.jsonData[prevIndex]._id}`);
   };
 
   handleNextButtonClick = () => {
     const nextIndex = this.state.currentPhotoIndex + 1;
     this.setState({ currentPhotoIndex: nextIndex });
+    // this.props.history.push(`/photos/${this.props.match.params.userId}/${this.state.jsonData[nextIndex]._id}`);
   };
 
   render() {
@@ -87,16 +101,16 @@ class UserPhotos extends React.Component {
                 <Paper className="photo">
                   <div>
                     <img
-                      src={`../../images/${jsonData[currentPhotoIndex].file_name}`}
+                      src={`../../images/${jsonData[this.state.currentPhotoIndex].file_name}`}
                       alt=""
                     />
                     <Typography variant="body2" color="textSecondary">
-                      {jsonData[currentPhotoIndex].date_time.slice(0, 10)}
+                      {jsonData[this.state.currentPhotoIndex].date_time.slice(0, 10)}
                     </Typography>
                   </div>
                   <div>
-                    {jsonData[currentPhotoIndex].comments ? (
-                      jsonData[currentPhotoIndex].comments.map((comment) => {
+                    {jsonData[this.state.currentPhotoIndex].comments ? (
+                      jsonData[this.state.currentPhotoIndex].comments.map((comment) => {
                         const commentId = comment._id;
                         const userComment = comment.comment;
                         const commentDatetime = comment.date_time.slice(0, 10);

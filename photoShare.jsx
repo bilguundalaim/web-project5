@@ -70,6 +70,10 @@ class PhotoShare extends React.Component {
                     path="/users/:userId"
                     render={(props) => <UserDetail {...props} callback={this.parentCallBack} />}
                   />
+                  {/* <Route 
+                    path="/photos/:userId/:photoId"
+                    render={(props) => <UserPhotos {...props} callback={this.parentCallBack} advancedFeature={true} />}
+                  /> */}
                   <Route
                     path="/photos/:userId"
                     render={(props) => <UserPhotos {...props} callback={this.parentCallBack} advancedFeature={this.state.advancedFeature}/>}
