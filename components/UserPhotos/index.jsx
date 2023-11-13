@@ -48,11 +48,16 @@ class UserPhotos extends React.Component {
 
   componentDidMount() {
     this.getJsonData(() => {
-      // const photoId = this.props.match.params.photoId;
-      // if (photoId) {
-      //   const index = this.state.jsonData.findIndex(photo => photo._id === photoId);
-      //   this.setState({ currentPhotoIndex: index });
-      // }
+      const photoId = this.props.match.params.photoId;
+      if (photoId) {
+        const index = this.state.jsonData.findIndex(photo => photo._id === photoId);
+        this.setState({ 
+          currentPhotoIndex: index,
+          advancedFeature: this.props.advancedFeature, 
+        }, () => {
+          console.log(this.state.advancedFeature);
+        });
+      }
       this.props.callback(
         `${this.state.firstname} ${this.state.lastname}`,
         "photo"
@@ -61,13 +66,18 @@ class UserPhotos extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    // if (prevProps.match.params.photoId !== this.props.match.params.photoId) {
-    //   const photoId = this.props.match.params.photoId;
-    //   if (photoId) {
-    //     const index = this.state.jsonData.findIndex(photo => photo._id === photoId);
-    //     this.setState({ currentPhotoIndex: index });
-    //   }
-    // }
+    if (prevProps.match.params.photoId !== this.props.match.params.photoId) {
+      const photoId = this.props.match.params.photoId;
+      if (photoId) {
+        const index = this.state.jsonData.findIndex(photo => photo._id === photoId);
+        this.setState({ 
+          currentPhotoIndex: index,
+          advancedFeature: this.props.advancedFeature, 
+        }, () => {
+          console.log(this.state.advancedFeature);
+        });
+      }
+    }
     if (prevProps.advancedFeature !== this.props.advancedFeature) {
       this.setState({ advancedFeature: this.props.advancedFeature });
     }
@@ -80,13 +90,13 @@ class UserPhotos extends React.Component {
   handlePrevButtonClick = () => {
     const prevIndex = this.state.currentPhotoIndex - 1;
     this.setState({ currentPhotoIndex: prevIndex });
-    // this.props.history.push(`/photos/${this.props.match.params.userId}/${this.state.jsonData[prevIndex]._id}`);
+    this.props.history.push(`/photos/${this.props.match.params.userId}/${this.state.jsonData[prevIndex]._id}`);
   };
 
   handleNextButtonClick = () => {
     const nextIndex = this.state.currentPhotoIndex + 1;
     this.setState({ currentPhotoIndex: nextIndex });
-    // this.props.history.push(`/photos/${this.props.match.params.userId}/${this.state.jsonData[nextIndex]._id}`);
+    this.props.history.push(`/photos/${this.props.match.params.userId}/${this.state.jsonData[nextIndex]._id}`);
   };
 
   render() {
