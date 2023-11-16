@@ -33,6 +33,7 @@ class UserDetail extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
+    console.log("UserDetail updated.");
     if (prevProps.match.params.userId !== this.props.match.params.userId) {
       this.getUserDetail(() => {
         const firstname = this.state.userDetail.first_name;
@@ -43,6 +44,7 @@ class UserDetail extends React.Component {
   }
 
   componentDidMount() {
+    console.log("UserDetail mounted");
     this.getUserDetail(() => {
       const firstname = this.state.userDetail.first_name;
       const lastname = this.state.userDetail.last_name;

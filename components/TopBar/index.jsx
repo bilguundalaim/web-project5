@@ -13,18 +13,8 @@ class TopBar extends React.Component {
     this.state = {
       context: "Welcome",
       version: null,
-      enableAdvancedFeature: false,
+      checked: localStorage.getItem('advancedFeature') === 'true',
     };
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.context !== this.props.context) {
-      const newContext = this.props.source === "photo" ? `${this.props.context}'s photo` : this.props.context;
-      this.setState({ 
-        context:  newContext,
-        enableAdvancedFeature: false,
-      });
-    }
   }
 
   componentDidMount() {
@@ -37,9 +27,20 @@ class TopBar extends React.Component {
       });
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.context !== this.props.context) {
+      const newContext = this.props.source === "photo" ? `${this.props.context}'s photo` : this.props.context;
+      this.setState({ 
+        context:  newContext,
+      });
+    }
+  }
+
   handleCheckBox = (event) => {
-    this.props.callback(event.target.checked);
-    this.setState({ enableAdvancedFeature: event.target.checked });
+    this.setState({ checked: event.target.checked }, () => {
+      localStorage.setItem('advancedFeature', this.state.checked);
+      this.props.callback(this.state.checked);
+    });
   };
 
   render() {
@@ -53,9 +54,9 @@ class TopBar extends React.Component {
             <Typography variant="h5" color="inherit">
               {this.state.context}
             </Typography>
-            <FormControlLabel
-              control={<Checkbox onChange={this.handleCheckBox} color="default" checked={this.state.enableAdvancedFeature}/>}
-              label="Enable Advanced Features"
+            <FormControlLabel 
+              control={<Checkbox onChange={this.handleCheckBox} color="default" checked={this.state.checked}/>}
+              label="Enable Advanced Feature"
             />
           </div>
         </Toolbar>

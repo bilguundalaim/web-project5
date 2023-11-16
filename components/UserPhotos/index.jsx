@@ -16,7 +16,7 @@ class UserPhotos extends React.Component {
       firstname: null,
       lastname: null,
       currentPhotoIndex: 0,
-      advancedFeature: false,
+      advancedFeature: this.props.advancedFeature,
     };
   }
 
@@ -45,41 +45,50 @@ class UserPhotos extends React.Component {
         console.error("Error fetching data: ", error);
       });
   }
-
+  
   componentDidMount() {
+    console.log('UserPhoto componentDidMounted');
     this.getJsonData(() => {
-      const photoId = this.props.match.params.photoId;
-      if (photoId) {
-        const index = this.state.jsonData.findIndex(photo => photo._id === photoId);
-        this.setState({ 
-          currentPhotoIndex: index,
-          advancedFeature: this.props.advancedFeature, 
-        }, () => {
-          console.log(this.state.advancedFeature);
-        });
-      }
       this.props.callback(
         `${this.state.firstname} ${this.state.lastname}`,
         "photo"
       );
+      const photo = this.props.match.params.photoId;
+      if (photo) {
+        const index = this.state.jsonData.findIndex(
+          (element) => element._id === photo
+        );
+        this.setState({ 
+          currentPhotoIndex: index,
+          // advancedFeature: true,
+        });
+        this.props.history.push(`/photos/${this.props.match.params.userId}/${photo}`);
+      } else if (this.state.advancedFeature) {
+        this.props.history.push(`/photos/${this.props.match.params.userId}/${this.state.jsonData[this.state.currentPhotoIndex]._id}`);
+      } else {
+        this.props.history.push(`/photos/${this.props.match.params.userId}`);
+      }
     });
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.match.params.photoId !== this.props.match.params.photoId) {
-      const photoId = this.props.match.params.photoId;
-      if (photoId) {
-        const index = this.state.jsonData.findIndex(photo => photo._id === photoId);
-        this.setState({ 
-          currentPhotoIndex: index,
-          advancedFeature: this.props.advancedFeature, 
-        }, () => {
-          console.log(this.state.advancedFeature);
-        });
-      }
-    }
+    console.log(this.state.advancedFeature);
     if (prevProps.advancedFeature !== this.props.advancedFeature) {
-      this.setState({ advancedFeature: this.props.advancedFeature });
+      this.setState({ advancedFeature: this.props.advancedFeature }, () => {
+        if (!this.state.advancedFeature) {
+          this.props.history.push(`/photos/${this.props.match.params.userId}`);
+        } else {
+          const photo = this.props.match.params.photoId;
+          if (photo) {
+            const index = this.state.jsonData.findIndex(
+              (element) => element._id === photo
+            );
+            this.setState({ currentPhotoIndex: index });
+            console.log("current: ", this.props.advancedFeature, "prev: ", prevProps.advancedFeature, "state: ", this.state.advancedFeature);
+          }
+          this.props.history.push(`/photos/${this.props.match.params.userId}/${this.state.jsonData[this.state.currentPhotoIndex]._id}`);
+        }
+      });
     }
   }
 

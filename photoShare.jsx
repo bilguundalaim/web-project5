@@ -15,7 +15,7 @@ class PhotoShare extends React.Component {
     this.state = {
       dataFromChild: null,
       source: null,
-      advancedFeature: null,
+      advancedFeature: localStorage.getItem('advancedFeature') === 'true',
     };
   }
 
@@ -24,10 +24,9 @@ class PhotoShare extends React.Component {
     this.setState({ source: source });
   };
 
-  setAdvancedFeature = (fromTopBar) => {
-    this.setState({ advancedFeature: fromTopBar }, () => {
-      console.log(this.state.advancedFeature);
-    });
+  topBarCallBack = (fromTopBar) => {
+    console.log('topBarCallBack', fromTopBar);
+    this.setState({ advancedFeature: fromTopBar });
   };
 
   render() {
@@ -36,7 +35,7 @@ class PhotoShare extends React.Component {
         <div>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TopBar context={this.state.dataFromChild} source={this.state.source} callback={this.setAdvancedFeature}/>
+              <TopBar context={this.state.dataFromChild} source={this.state.source} callback={this.topBarCallBack}/>
             </Grid>
             <div className="cs142-main-topbar-buffer" />
             <Grid item sm={3}>
@@ -72,7 +71,7 @@ class PhotoShare extends React.Component {
                   />
                   <Route 
                     path="/photos/:userId/:photoId"
-                    render={(props) => <UserPhotos {...props} callback={this.parentCallBack} advancedFeature={true} />}
+                    render={(props) => <UserPhotos {...props} callback={this.parentCallBack} advancedFeature={this.state.advancedFeature}/>}
                   />
                   <Route
                     path="/photos/:userId"
